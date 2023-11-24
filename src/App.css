@@ -1,54 +1,49 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
 .main {
   display: flex;
   flex-direction: column;
   margin-left: 100px;
   margin-top: 50px;
 }
-
 .option {
   display: flex;
   flex-direction: column;
   width: 250px;
   font-size: small;
 }
-
 .country-code {
   margin-top: 20px;
   font-size: small;
 }
-
 #code {
   border: 1px solid black;
   width: 70px;
   height: 20px;
 }
-
 .number {
   /* border: 2px solid black; */
   width: 150px;
   height: 20px;
   font-size: small;
 }
-
 .country-code-design {
   display: flex;
   gap: 10px;
 }
-
 .button-print {
   margin-top: 20px;
-  margin-left: 80px;
+  margin-left: 50px;
 }
 
+button {
+  background-color: green;
+  color: white;
+  height: 30px;
+  width: 70px;
+}
+
+.cancel-button {
+  background-color: red;
+}
 #print-number {
   border: 1px solid black;
   width: 150px;
@@ -57,33 +52,37 @@
   margin-left: 30px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h1 {
+  margin-left: 50px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+table {
+  background-color: beige;
+  margin-left: 50px;
+  text-align: center;
+}
+
+.inputData {
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+input {
+  background-color: antiquewhite;
+  height: 30px;
+  width: 600px;
+}
+
+.button-design {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: row;
 }
 
-.App-link {
-  color: #61dafb;
+.edit-button {
+  background-color: blue;
+  margin-right: 5px;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+.delete-button {
+  background-color: red;
+  margin-right: 5px;
 }

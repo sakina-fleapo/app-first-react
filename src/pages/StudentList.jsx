@@ -1,100 +1,133 @@
-import React, { useState } from "react";
-
+import { useState } from "react";
+import "../App.css";
+import SubmitButton from "../components/SubmitButton";
+import EditForm from "./OpenEditForm";
 
 export default function StudentList() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [studentlist, setStudentlist] = useState([]);
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [studentdata, setStudentData] = useState([]);
   const [show, setShow] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [selectedstudent, setSelectedStudent] = useState(null);
 
-  const studentAdd = () => {
-    // const newStudent = {'name': name, 'phone': phone}}; 
-    const newStudent = { name, phone }
-
-    setStudentlist((curentArray) => {
-      curentArray.push(newStudent);
-      //  return curentArray;
-      return [...curentArray];
-    });
-    closeStudentForm();
-  }
-
-  const displayStudentForm = () => {
+  function Addstudent() {
+    console.log("hhh");
     setShow(true);
   }
 
-  const closeStudentForm = () => {
+  function submitData() {
+    // const newStudent={
+    //   name:name,
+    //   phone:phone
+    // }
+    const newStudent = { name, phone, email, address };
+
+    setStudentData((currentValue) => {
+      currentValue.push(newStudent);
+      return [...currentValue];
+    });
+  }
+
+  function cancelData() {
     setShow(false);
-    setName("");
-    setPhone("");
+  }
+
+  function editHandler(s) {
+    setShowForm(true);
+    setSelectedStudent(s);
   }
 
   return (
     <div>
-      <div className="container">
-        <h3>My State</h3>
-        <h6>{name}</h6>
-        <h6>{phone}</h6>
-        <h6>{JSON.stringify(studentlist)}</h6>
-        <h6>{show}</h6>
-        <h3>List Of Student</h3>
-        <table className="table table-success table-striped">
-          <thead>
-            <tr>
-              <th scope="col">E No</th>
-              <th scope="col">Name</th>
-              <th scope="col">Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {studentlist.map((student, index) => {
-              return <tr key={index}>
+      <h1>List of Student</h1>
+      <div>
+        <table border="2" width="80%">
+          <tr>
+            <th>Sl No.</th>
+            <th>Name</th>
+            <th>Phone No</th>
+            <th>Email Id</th>
+            <th>Address</th>
+            <th>Action</th>
+          </tr>
+          {studentdata.map((s, index) => {
+            return (
+              <tr>
                 <td>{index + 1}</td>
-                <td>{student.name}</td>
-                <td>{student.phone}</td>
+                <td>{s.name}</td>
+                <td>{s.phone}</td>
+                <td>{s.email}</td>
+                <td>{s.address}</td>
+                <td>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      editHandler(s);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button className="delete-button">Delete</button>
+                </td>
               </tr>
-            })}
-
-          </tbody>
+            );
+          })}
         </table>
-        {!show ?
-          <div>
-            <button type="button" className="btn btn-success" onClick={displayStudentForm}>Add</button>
-          </div>
-          :
-          <div className="student-form my-3">
-            <div className="row">
-              <div className="col mb-2">
-                <label htmlFor="formGroupExampleInput" className="form-label">Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Name"
-                  aria-label="Enter Name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                />
-              </div>
-              <div class="col mb-2">
-                <label htmlFor="formGroupExampleInput" class="form-label">Phone</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Enter Phone"
-                  aria-label="Enter Phone"
-                  value={phone}
-                  onChange={(e) => {
-                    setPhone(e.target.value);
-                  }} />
-              </div>
-            </div>
-            <button type="button" className="btn btn-success" onClick={studentAdd}>Submit</button>
-            <button type="button" className="btn btn-danger" style={{ marginLeft: "5px" }} onClick={closeStudentForm}>Close</button>
-          </div>
-        }
+        <div>
+          <SubmitButton onClickHandeler={Addstudent} name={"ADD"} />
+        </div>
       </div>
+      {show ? (
+        <div className="inputData">
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Enter your Name"
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          ></input>
+          <input
+            type="number"
+            name="contact"
+            placeholder="Enter your Phone Number"
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
+          ></input>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your Email Id"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          ></input>
+          <input
+            type="text"
+            name="address"
+            placeholder="Enter your Address"
+            onChange={(e) => {
+              setAddress(e.target.value);
+            }}
+          ></input>
+        </div>
+      ) : null}
+      {show ? (
+        <div className="button-design">
+          <SubmitButton onClickHandeler={submitData} name={"SUBMIT"} />
+          <SubmitButton onClickHandeler={cancelData} name={"CANCEL"} />
+        </div>
+      ) : null}
+
+      {showForm && (
+        <div className="">
+          <EditForm s={selectedstudent} />
+        </div>
+      )}
     </div>
-  )
+  );
 }
