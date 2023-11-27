@@ -14,7 +14,6 @@ export default function StudentList() {
   const [selectedstudent, setSelectedStudent] = useState(null);
 
   function Addstudent() {
-    console.log("hhh");
     setShow(true);
   }
 
@@ -26,6 +25,7 @@ export default function StudentList() {
     const newStudent = { name, phone, email, address };
 
     setStudentData((currentValue) => {
+      newStudent["id"] = currentValue.length + 1;
       currentValue.push(newStudent);
       return [...currentValue];
     });
@@ -38,6 +38,18 @@ export default function StudentList() {
   function editHandler(s) {
     setShowForm(true);
     setSelectedStudent(s);
+  }
+
+  function updateStudent(updatedData) {
+    studentdata.map((student, index) => {
+      if (student.id === selectedstudent.id) {
+        setStudentData((currentdata) => {
+          currentdata[index] = updatedData;
+          return [...currentdata];
+        });
+      }
+      return student;
+    });
   }
 
   return (
@@ -125,7 +137,7 @@ export default function StudentList() {
 
       {showForm && (
         <div className="">
-          <EditForm s={selectedstudent} />
+          <EditForm s={selectedstudent} updateStudent={updateStudent} />
         </div>
       )}
     </div>
