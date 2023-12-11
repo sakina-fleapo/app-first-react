@@ -1,178 +1,150 @@
 import { useState } from "react";
-import AddStudent from "./AddStudent";
+import "../App.css";
 import SubmitButton from "../components/SubmitButton";
+import EditForm from "./OpenEditForm";
 
-const StudentList = () => {
-
-  const [studentList, setStudentList] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState(null);
+export default function StudentList() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [studentdata, setStudentData] = useState([]);
   const [show, setShow] = useState(false);
-  const [editShow, seteditShow] = useState(false);
-  const [submitText, setSubmitText] = useState("Addd");
+  const [showForm, setShowForm] = useState(false);
+  const [selectedstudent, setSelectedStudent] = useState(null);
 
-  const hideStudentForm = () => {
-    setShow(false);
-  }
-  const showStudentForm = () => {
+  function Addstudent() {
     setShow(true);
   }
-  const openEditForm = (student) => {
-    setSelectedStudent(student);
-    seteditShow(true);
-  }
-  // const updateStudent = () => {
-  //   studentList.map((student, index) => {
-  //     if (student.id === selectedStudent.id) {
-  //       setStudentList((currentdata) => {
-  //         currentdata[index] = selectedStudent;
-  //         return [...currentdata];
-  //       })
-  //       updateCloseForm();
 
-  //     }
-  //     else {
-  //       alert("Can't Update");
-  //     }
-  //   });
-  // }
-  // const updateCloseForm = () => {
-  //   seteditShow(false);
-  //   setName('');
-  //   setEmail('');
-  //   setPhone('');
-  //   setStreetOne('');
-  //   setStreetTwo('');
-  //   setCity('');
-  //   setPin('');
-  // }
+  function submitData() {
+    // const newStudent={
+    //   name:name,
+    //   phone:phone
+    // }
+    const newStudent = { name, phone, email, address };
+
+    setStudentData((currentValue) => {
+      newStudent["id"] = currentValue.length + 1;
+      currentValue.push(newStudent);
+      return [...currentValue];
+    });
+  }
+
+  function cancelData() {
+    setShow(false);
+  }
+
+  function cancelUpdateData() {
+    setShowForm(false);
+  }
+
+  function editHandler(s) {
+    setShowForm(true);
+    setSelectedStudent(s);
+  }
+
+  function updateStudent(updatedData) {
+    studentdata.map((student, index) => {
+      if (student.id === selectedstudent.id) {
+        setStudentData((currentdata) => {
+          currentdata[index] = updatedData;
+          return [...currentdata];
+        });
+      }
+      return student;
+    });
+  }
 
   return (
     <div>
-      <div className="container">
-        <h3 className="text-center mt-3">
-          This is StudentList
-        </h3>
-        <table className="table">
-          <thead>
-            <tr className="table-dark">
-              <th scope="col">E No.</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Phone</th>
-              <th scope="col" colSpan={4} style={{ textAlign: 'center' }}>Address</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {studentList.map((student, index) => {
-              return <tr key={index}>
+      <h1>List of Student</h1>
+      <div>
+        <table border="2" width="80%">
+          <tr>
+            <th>Sl No.</th>
+            <th>Name</th>
+            <th>Phone No</th>
+            <th>Email Id</th>
+            <th>Address</th>
+            <th>Action</th>
+          </tr>
+          {studentdata.map((s, index) => {
+            return (
+              <tr>
                 <td>{index + 1}</td>
-                <td>{student.name}</td>
-                <td>{student.email}</td>
-                <td>{student.phone}</td>
-                <td>{student.streetOne}</td>
-                <td>{student.streetTwo}</td>
-                <td>{student.city}</td>
-                <td>{student.pin}</td>
-                <td><button type="button" onClick={() => openEditForm(student)} className="btn btn-primary">Edit</button></td>
+                <td>{s.name}</td>
+                <td>{s.phone}</td>
+                <td>{s.email}</td>
+                <td>{s.address}</td>
+                <td>
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      editHandler(s);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button className="delete-button">Delete</button>
+                </td>
               </tr>
-            })}
-          </tbody>
+            );
+          })}
         </table>
-        <SubmitButton onClickHandeler={() => setSubmitText("Submit")} name={"change text"} className="btn btn-outline-warning btn-default" />
-        {(!show ?
-          <SubmitButton onClickHandeler={showStudentForm} name={submitText} className="btn btn-outline-success btn-default" />
-          // <button type="submit" className="btn btn-outline-success btn-primary" onClick={showStudentForm} style={{ color: "white", marginBottom: '20px' }}>Add</button>
-          :
-          <AddStudent setStudentList={setStudentList} hideForm={hideStudentForm} />
-        )}
-        {/* {editShow ? (
-          <div className="myForm">
-            <div className="row" style={{ marginBottom: '20px' }}>
-              <div className="col">
-                <label htmlFor="inputEmail4" className="form-label">Name</label>
-                <input type="text" className="form-control" placeholder="Enter Name" value={selectedStudent.name} required
-                  onChange={(event) => {
-                    setSelectedStudent((currentValue) => {
-                      return { ...currentValue, ...{ name: event.target.value } };
-                    })
-                  }}
-                />
-              </div>
-              <div className="col">
-                <label htmlFor="inputEmail4" className="form-label">Email</label>
-                <input type="email" className="form-control" placeholder="Enter Email" value={selectedStudent.email} required
-                  onChange={(event) => {
-                    setSelectedStudent(currentValue => {
-                      return { ...currentValue, ...{ email: event.target.value } }
-                    })
-                  }}
-                />
-              </div>
-            </div>
-            <div className="row" style={{ marginBottom: '20px' }}>
-              <div className="col">
-                <label htmlFor="inputEmail4" className="form-label">Phone</label>
-                <input type="number" className="form-control" placeholder="Enter Number" value={selectedStudent.phone} required
-                  onChange={(event) => {
-                    setSelectedStudent(currentValue => {
-                      return { ...currentValue, ...{ phone: event.target.value } }
-                    });
-                  }}
-                />
-              </div>
-              <div className="col">
-                <label htmlFor="inputEmail4" className="form-label">Address Street 1</label>
-                <input type="text" className="form-control" placeholder="Enter Address Street 1" value={selectedStudent.streetOne}
-                  onChange={(event) => {
-                    setSelectedStudent(currentValue => {
-                      return { ...currentValue, ...{ streetOne: event.target.value } }
-                    });
-                  }}
-                />
-              </div>
-              <div className="col">
-                <label htmlFor="inputEmail4" className="form-label">Address Street 2</label>
-                <input type="text" className="form-control" placeholder="Enter Address Street 2" value={selectedStudent.streetTwo}
-                  onChange={(event) => {
-                    setSelectedStudent(currentValue => {
-                      return { ...currentValue, ...{ streetTwo: event.target.value } }
-                    });
-                  }}
-                />
-              </div>
-            </div>
-            <div className="row" style={{ marginBottom: '20px' }}>
-              <div className="col">
-                <label htmlFor="inputEmail4" className="form-label">City</label>
-                <input type="text" className="form-control" placeholder="Enter City" value={selectedStudent.city}
-                  onChange={(event) => {
-                    setSelectedStudent(currentValue => {
-                      return { ...currentValue, ...{ city: event.target.value } }
-                    });
-                  }}
-
-                />
-              </div>
-              <div className="col">
-                <label htmlFor="inputEmail4" className="form-label">PinCode</label>
-                <input type="number" className="form-control" placeholder="Enter Pincode" value={selectedStudent.pin}
-                  onChange={(event) => {
-                    setSelectedStudent(currentValue => {
-                      return { ...currentValue, ...{ pin: event.target.value } }
-                    });
-                  }}
-                />
-              </div>
-            </div>
-            <button type="button" className="btn btn-success" style={{ marginRight: '10px' }} onClick={updateStudent}>Update</button>
-            <button type="button" className="btn btn-danger" onClick={updateCloseForm}>Cancel</button>
-          </div>
-        ) : null} */}
-
+        <div>
+          <SubmitButton onClickHandeler={Addstudent} name={"ADD"} />
+        </div>
       </div>
-    </div>
-  )
-}
+      {show ? (
+        <div className="inputData">
+          <input
+            type="text"
+            name="fullName"
+            placeholder="Enter your Name"
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          ></input>
+          <input
+            type="number"
+            name="contact"
+            placeholder="Enter your Phone Number"
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
+          ></input>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your Email Id"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          ></input>
+          <input
+            type="text"
+            name="address"
+            placeholder="Enter your Address"
+            onChange={(e) => {
+              setAddress(e.target.value);
+            }}
+          ></input>
+        </div>
+      ) : null}
+      {show ? (
+        <div className="button-design">
+          <SubmitButton onClickHandeler={submitData} name={"SUBMIT"} />
+          <SubmitButton onClickHandeler={cancelData} name={"CANCEL"} />
+        </div>
+      ) : null}
 
-export default StudentList;
+      {showForm && (
+        <div className="">
+          <EditForm s={selectedstudent} updateStudent={updateStudent} />
+          <SubmitButton onClickHandeler={cancelUpdateData} name={"CANCEL"} />
+        </div>
+      )}
+    </div>
+  );
+}

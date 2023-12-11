@@ -1,11 +1,10 @@
-import './App.css'
+import "./App.css";
+import AjaxToReact from "./pages/AjaxtoReact";
 import StudentList from "./pages/StudentList";
 
 function App() {
-
-  return (
-    <StudentList />
-  )
+  let condition = 2;
+  return condition === 1 ? <AjaxToReact /> : <StudentList />;
 }
 
-export default App
+export default App;
