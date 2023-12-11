@@ -35,6 +35,10 @@ export default function StudentList() {
     setShow(false);
   }
 
+  function cancelUpdateData() {
+    setShowForm(false);
+  }
+
   function editHandler(s) {
     setShowForm(true);
     setSelectedStudent(s);
@@ -138,6 +142,7 @@ export default function StudentList() {
       {showForm && (
         <div className="">
           <EditForm s={selectedstudent} updateStudent={updateStudent} />
+          <SubmitButton onClickHandeler={cancelUpdateData} name={"CANCEL"} />
         </div>
       )}
     </div>

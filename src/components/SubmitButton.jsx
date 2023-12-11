@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
 export default class SubmitButton extends Component {
   // constructor(props) {
@@ -10,6 +10,6 @@ export default class SubmitButton extends Component {
       <div className="button-print">
         <button onClick={this.props.onClickHandeler}>{this.props.name}</button>
       </div>
-    )
+    );
   }
 }
