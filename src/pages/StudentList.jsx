@@ -2,12 +2,9 @@ import { useState } from "react";
 import "../App.css";
 import SubmitButton from "../components/SubmitButton";
 import EditForm from "./OpenEditForm";
+import { AddStudent } from "./AddStudent";
 
 export default function StudentList() {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
   const [studentdata, setStudentData] = useState([]);
   const [show, setShow] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -17,21 +14,17 @@ export default function StudentList() {
     setShow(true);
   }
 
-  function submitData() {
-    // const newStudent={
-    //   name:name,
-    //   phone:phone
-    // }
-    const newStudent = { name, phone, email, address };
-
+  function onSubmit(newStudent) {
     setStudentData((currentValue) => {
       newStudent["id"] = currentValue.length + 1;
       currentValue.push(newStudent);
       return [...currentValue];
     });
+
+    setShow(false);
   }
 
-  function cancelData() {
+  function onCancel() {
     setShow(false);
   }
 
@@ -71,7 +64,7 @@ export default function StudentList() {
           </tr>
           {studentdata.map((s, index) => {
             return (
-              <tr>
+              <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{s.name}</td>
                 <td>{s.phone}</td>
@@ -96,48 +89,7 @@ export default function StudentList() {
           <SubmitButton onClickHandeler={Addstudent} name={"ADD"} />
         </div>
       </div>
-      {show ? (
-        <div className="inputData">
-          <input
-            type="text"
-            name="fullName"
-            placeholder="Enter your Name"
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          ></input>
-          <input
-            type="number"
-            name="contact"
-            placeholder="Enter your Phone Number"
-            onChange={(e) => {
-              setPhone(e.target.value);
-            }}
-          ></input>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your Email Id"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          ></input>
-          <input
-            type="text"
-            name="address"
-            placeholder="Enter your Address"
-            onChange={(e) => {
-              setAddress(e.target.value);
-            }}
-          ></input>
-        </div>
-      ) : null}
-      {show ? (
-        <div className="button-design">
-          <SubmitButton onClickHandeler={submitData} name={"SUBMIT"} />
-          <SubmitButton onClickHandeler={cancelData} name={"CANCEL"} />
-        </div>
-      ) : null}
+      {show && <AddStudent onSubmit={onSubmit} onCancel={onCancel} />}
 
       {showForm && (
         <div className="">
