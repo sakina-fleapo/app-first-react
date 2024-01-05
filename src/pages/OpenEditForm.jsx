@@ -1,14 +1,44 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getData, setData } from "../utils/storageHandler";
+import SubmitButton from "../components/SubmitButton";
 
-export default function EditForm({ s, updateStudent }) {
+export default function EditForm() {
   const [student, setStudent] = useState(null);
 
   useEffect(() => {
-    setStudent(s);
+    console.log(params.id);
+    getStudent(params.id);
   }, []);
 
-  function updateHandler() {
-    updateStudent(student);
+  const navigate = useNavigate();
+  const params = useParams();
+
+  const getStudent = (studentId) => {
+    const allStudent = getData();
+    console.log(allStudent);
+    const foundStudent = allStudent.find((student) => student.id == studentId);
+    console.log("foundStudent", foundStudent);
+    if (foundStudent) {
+      setStudent(foundStudent);
+    }
+  };
+
+  function updateStudent() {
+    const allStudent = getData();
+    const updatedStudent = allStudent.map((s) => {
+      if (s.id == params.id) {
+        return student;
+      } else {
+        return s;
+      }
+    });
+    setData(updatedStudent);
+    closeUpdateForm();
+  }
+
+  function closeUpdateForm() {
+    navigate("/");
   }
 
   return student ? (
@@ -74,9 +104,10 @@ export default function EditForm({ s, updateStudent }) {
         }}
       ></input>
       <div>
-        <button style={{ marginTop: "10px" }} onClick={updateHandler}>
+        <button style={{ marginTop: "10px" }} onClick={updateStudent}>
           Update
         </button>
+        <SubmitButton onClickHandeler={closeUpdateForm} name={"CANCEL"} />
       </div>
     </div>
   ) : null;

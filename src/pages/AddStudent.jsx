@@ -1,21 +1,28 @@
 import { useState } from "react";
 import SubmitButton from "../components/SubmitButton";
+import { useNavigate } from "react-router-dom";
+import { getData, setData } from "../utils/storageHandler";
 
-export const AddStudent = ({ onSubmit, onCancel }) => {
+export const AddStudent = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
 
+  const navigate = useNavigate();
+
   function submitData() {
     const newStudent = { name, phone, email, address };
-    onSubmit(newStudent);
-
-    setName("");
-    setPhone("");
-    setEmail("");
-    setAddress("");
+    const allStudent = getData();
+    newStudent["id"] = allStudent.length + 1;
+    allStudent.push(newStudent);
+    setData(allStudent);
+    closeForm();
   }
+
+  const closeForm = () => {
+    navigate("/");
+  };
 
   return (
     <div>
@@ -56,7 +63,7 @@ export const AddStudent = ({ onSubmit, onCancel }) => {
 
       <div className="button-design">
         <SubmitButton onClickHandeler={submitData} name={"SUBMIT"} />
-        <SubmitButton onClickHandeler={onCancel} name={"CANCEL"} />
+        <SubmitButton onClickHandeler={closeForm} name={"CANCEL"} />
       </div>
     </div>
   );

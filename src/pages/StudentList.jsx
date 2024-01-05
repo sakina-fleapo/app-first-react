@@ -1,52 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../App.css";
 import SubmitButton from "../components/SubmitButton";
-import EditForm from "./OpenEditForm";
-import { AddStudent } from "./AddStudent";
+import { getData, setData } from "../utils/storageHandler";
+import { useNavigate } from "react-router-dom";
 
 export default function StudentList() {
   const [studentdata, setStudentData] = useState([]);
-  const [show, setShow] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedstudent, setSelectedStudent] = useState(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const allStudent = getData();
+    setStudentData(allStudent);
+  }, []);
 
   function Addstudent() {
-    setShow(true);
+    navigate("/student-add");
   }
 
-  function onSubmit(newStudent) {
-    setStudentData((currentValue) => {
-      newStudent["id"] = currentValue.length + 1;
-      currentValue.push(newStudent);
-      return [...currentValue];
-    });
-
-    setShow(false);
+  function editHandler(studentId) {
+    navigate(`/student-edit/${studentId}`);
   }
 
-  function onCancel() {
-    setShow(false);
-  }
-
-  function cancelUpdateData() {
-    setShowForm(false);
-  }
-
-  function editHandler(s) {
-    setShowForm(true);
-    setSelectedStudent(s);
-  }
-
-  function updateStudent(updatedData) {
-    studentdata.map((student, index) => {
-      if (student.id === selectedstudent.id) {
-        setStudentData((currentdata) => {
-          currentdata[index] = updatedData;
-          return [...currentdata];
-        });
-      }
-      return student;
-    });
+  function deleteStudent(studentId) {
+    const allStudent = getData();
+    const updatedAllStudent = allStudent.filter((s) => s.id != studentId);
+    setData(updatedAllStudent);
+    setStudentData(updatedAllStudent);
   }
 
   return (
@@ -74,12 +54,19 @@ export default function StudentList() {
                   <button
                     className="edit-button"
                     onClick={() => {
-                      editHandler(s);
+                      editHandler(s.id);
                     }}
                   >
                     Edit
                   </button>
-                  <button className="delete-button">Delete</button>
+                  <button
+                    className="delete-button"
+                    onClick={() => {
+                      deleteStudent(s.id);
+                    }}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );
@@ -89,14 +76,6 @@ export default function StudentList() {
           <SubmitButton onClickHandeler={Addstudent} name={"ADD"} />
         </div>
       </div>
-      {show && <AddStudent onSubmit={onSubmit} onCancel={onCancel} />}
-
-      {showForm && (
-        <div className="">
-          <EditForm s={selectedstudent} updateStudent={updateStudent} />
-          <SubmitButton onClickHandeler={cancelUpdateData} name={"CANCEL"} />
-        </div>
-      )}
     </div>
   );
 }
